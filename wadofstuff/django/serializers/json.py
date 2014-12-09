@@ -19,7 +19,7 @@ class Serializer(PythonSerializer):
         Return the fully serialized queryset (or None if the output stream
         is not seekable).
         """
-
+        self.options.pop('use_natural_keys', None)
         if callable(getattr(self.stream, 'getvalue', None)):
             return self.stream.getvalue()
 
