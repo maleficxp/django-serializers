@@ -66,13 +66,7 @@ class Serializer(base.Serializer):
         Called to handle each individual (non-relational) field on an object.
         """
         value = field._get_val_from_obj(obj)
-        # Protected types (i.e., primitives like None, numbers, dates,
-        # and Decimals) are passed through as is. All other values are
-        # converted to string first.
-        if is_protected_type(value):
-            self._fields[field.name] = value
-        else:
-            self._fields[field.name] = field.value_to_string(obj)
+        self._fields[field.name] = value
 
     def handle_fk_field(self, obj, field):
         """
