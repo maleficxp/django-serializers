@@ -187,7 +187,9 @@ class Serializer(base.Serializer):
         Recursively serializes relations specified in the 'relations' option.
         """
         fname = field_name
-        related = getattr(obj, fname)
+        related = None
+        if hasattr(obj, fname):
+            related = getattr(obj, fname)
         if related is not None:
             if field_name in self.relations:
                 # perform full serialization of FK
