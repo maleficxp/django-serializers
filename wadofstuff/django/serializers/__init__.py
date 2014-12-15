@@ -1,1 +1,1 @@
-__version__ = '1.1.1-viewfuhrer_patch'
+__version__ = '1.1.2-viewfuhrer_patch'
