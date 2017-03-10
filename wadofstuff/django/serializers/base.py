@@ -64,18 +64,17 @@ class Serializer(base.Serializer):
                         if not self.fields or field.attname in self.fields:
                             self.handle_m2m_field(obj, field)
             # relations patch
-            related_fk_objects = obj._meta.get_all_related_objects()
-            for ro in related_fk_objects:
-                field_name = ro.get_accessor_name()
-                if field_name not in self.excludes:
-                    self.handle_related_fk_field(obj, field_name)
+            for ro in obj._meta.get_fields():
+                if (ro.one_to_many or ro.one_to_one) and ro.auto_created and not ro.concrete:
+                    field_name = ro.get_accessor_name()
+                    if field_name not in self.excludes:
+                        self.handle_related_fk_field(obj, field_name)
 
-            related_m2m_objects = obj._meta.get_all_related_many_to_many_objects()
-            for ro in related_m2m_objects:
-                field_name = ro.get_accessor_name()
-                if field_name not in self.excludes:
-                    self.handle_related_m2m_field(obj, field_name)
-
+            for ro in obj._meta.get_fields(include_hidden=True):
+                if ro.many_to_many and ro.auto_created:
+                    field_name = ro.get_accessor_name()
+                    if field_name not in self.excludes:
+                        self.handle_related_m2m_field(obj, field_name)
             # end relations patch
 
             for extra in self.extras:
